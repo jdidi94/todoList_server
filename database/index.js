@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const User = require("./user"); // Adjust the path as needed
+const Todo = require("./todo"); // Adjust the path as needed
+
 const Blog = require("./blog"); // Adjust the path as needed
 mongoose
   .connect(process.env.database)
@@ -10,6 +12,7 @@ const generateData = async () => {
     // Clear existing data
     await User.deleteMany({});
     await Blog.deleteMany({});
+    await Todo.deleteMany({});
 
     // Create sample users
     const users = [
@@ -59,6 +62,39 @@ const generateData = async () => {
         author: createdUsers[3]._id,
       },
     ];
+    const todos = [
+      {
+        imageUrl: "http://example.com/image1.jpg",
+        name: "Todo 1",
+        description: "This is the first todo",
+        complete: false,
+        author: createdUsers[1]._id,
+      },
+      {
+        imageUrl: "http://example.com/image2.jpg",
+        name: "Todo 2",
+        description: "This is the second todo",
+        complete: false,
+        author: createdUsers[1]._id,
+      },
+      {
+        imageUrl: "http://example.com/image3.jpg",
+        name: "Todo 3",
+        description: "This is the third todo",
+        complete: false,
+        author: createdUsers[2]._id,
+      },
+      {
+        imageUrl: "http://example.com/image4.jpg",
+        name: "Todo 4",
+        description: "This is the fourth todo",
+        complete: false,
+        author: createdUsers[2]._id,
+      },
+    ];
+
+    const allTodos = await Todo.insertMany(todos);
+    console.log("Todos created:", allTodos);
 
     const createdBlogs = await Blog.insertMany(blogs);
     console.log("Blogs created:", createdBlogs);
@@ -76,4 +112,4 @@ const generateData = async () => {
 
 // generateData();
 
-module.exports = { User, Blog };
+module.exports = { User, Blog, Todo };
